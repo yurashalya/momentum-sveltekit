@@ -31,6 +31,6 @@ Husky runs lint-staged before each commit. Staged TypeScript, JavaScript, and Sv
 
 ## Architecture
 
-See [architecture plan](docs/architecture.md). Original JSON data is under `mocks/` and never publicly exposed through `static/`. The search URL codec lives in `src/lib/features/posts`; reusable UI starts in `src/lib/components/ui`.
+See the [architecture plan](docs/architecture.md) and [design tokens](docs/design-system.md). Original JSON data is under `mocks/` and never publicly exposed through `static/`. The search URL codec lives in `src/lib/features/posts`; reusable UI starts in `src/lib/components/ui`.
 
 The dashboard, real authentication, EN/DE routes, production SEO, observability, performance budgets, and full test flows are not implemented in this setup phase. Demo credentials will be documented when login is implemented.

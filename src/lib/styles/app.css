@@ -2,31 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
+/* RGB triplets keep Tailwind opacity modifiers available, e.g. bg-overlay/60. */
 :root {
 	color-scheme: light;
+
 	--color-canvas: 248 250 252;
 	--color-surface: 255 255 255;
+	--color-surface-muted: 241 245 249;
+	--color-surface-raised: 255 255 255;
 	--color-foreground: 15 23 42;
 	--color-muted: 71 85 105;
 	--color-border: 203 213 225;
+	--color-border-strong: 148 163 184;
 	--color-accent: 29 78 216;
+	--color-accent-hover: 30 64 175;
+	--color-accent-soft: 219 234 254;
 	--color-accent-foreground: 255 255 255;
+	--color-success: 22 101 52;
+	--color-success-soft: 220 252 231;
+	--color-warning: 146 64 14;
+	--color-warning-soft: 254 243 199;
+	--color-danger: 185 28 28;
+	--color-danger-hover: 153 27 27;
+	--color-danger-soft: 254 226 226;
+	--color-danger-foreground: 255 255 255;
+	--color-focus: 29 78 216;
+	--color-overlay: 2 6 23;
+
 	--space-page: clamp(1rem, 4vw, 2.5rem);
 	--space-section: clamp(3rem, 8vw, 6rem);
+	--space-card: clamp(1rem, 2vw, 1.5rem);
+	--space-field: 0.75rem;
+	--width-content: 72rem;
 	--radius-card: 1.25rem;
 	--radius-control: 0.75rem;
-	--font-sans: 'Inter';
+	--radius-pill: 9999px;
+	--shadow-card: 0 12px 32px rgb(15 23 42 / 0.08);
+
+	--font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-size-display: clamp(2.5rem, 5vw, 4.5rem);
+	--line-height-display: 1.08;
+	--font-size-heading: clamp(1.875rem, 3vw, 2.75rem);
+	--line-height-heading: 1.15;
+	--font-size-subheading: 1.25rem;
+	--line-height-subheading: 1.35;
+	--font-size-body: 1rem;
+	--line-height-body: 1.6;
+	--font-size-caption: 0.875rem;
+	--line-height-caption: 1.45;
 }
 
 :root.dark {
 	color-scheme: dark;
 	--color-canvas: 10 15 28;
 	--color-surface: 22 30 46;
+	--color-surface-muted: 30 41 59;
+	--color-surface-raised: 38 52 73;
 	--color-foreground: 241 245 249;
 	--color-muted: 148 163 184;
-	--color-border: 51 65 85;
+	--color-border: 71 85 105;
+	--color-border-strong: 100 116 139;
 	--color-accent: 147 197 253;
+	--color-accent-hover: 191 219 254;
+	--color-accent-soft: 30 58 95;
 	--color-accent-foreground: 15 23 42;
+	--color-success: 134 239 172;
+	--color-success-soft: 5 46 22;
+	--color-warning: 252 211 77;
+	--color-warning-soft: 69 26 3;
+	--color-danger: 252 165 165;
+	--color-danger-hover: 254 202 202;
+	--color-danger-soft: 69 10 10;
+	--color-danger-foreground: 69 10 10;
+	--color-focus: 147 197 253;
+	--shadow-card: 0 16px 40px rgb(0 0 0 / 0.25);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,17 +83,32 @@
 		color-scheme: dark;
 		--color-canvas: 10 15 28;
 		--color-surface: 22 30 46;
+		--color-surface-muted: 30 41 59;
+		--color-surface-raised: 38 52 73;
 		--color-foreground: 241 245 249;
 		--color-muted: 148 163 184;
-		--color-border: 51 65 85;
+		--color-border: 71 85 105;
+		--color-border-strong: 100 116 139;
 		--color-accent: 147 197 253;
+		--color-accent-hover: 191 219 254;
+		--color-accent-soft: 30 58 95;
 		--color-accent-foreground: 15 23 42;
+		--color-success: 134 239 172;
+		--color-success-soft: 5 46 22;
+		--color-warning: 252 211 77;
+		--color-warning-soft: 69 26 3;
+		--color-danger: 252 165 165;
+		--color-danger-hover: 254 202 202;
+		--color-danger-soft: 69 10 10;
+		--color-danger-foreground: 69 10 10;
+		--color-focus: 147 197 253;
+		--shadow-card: 0 16px 40px rgb(0 0 0 / 0.25);
 	}
 }
 
 @layer base {
 	html {
-		font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+		font-family: var(--font-sans);
 		background: rgb(var(--color-canvas));
 		color: rgb(var(--color-foreground));
 	}
@@ -52,7 +116,11 @@
 		min-width: 320px;
 	}
 	:focus-visible {
-		outline: 2px solid rgb(var(--color-accent));
+		outline: 2px solid rgb(var(--color-focus));
 		outline-offset: 3px;
+	}
+	::selection {
+		background: rgb(var(--color-accent-soft));
+		color: rgb(var(--color-foreground));
 	}
 }
