@@ -1,0 +1,58 @@
+{
+	"name": "momentum-sveltekit",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync && husky",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"typecheck": "svelte-kit sync && tsc --noEmit",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write .",
+		"test:unit": "vitest run",
+		"test:unit:watch": "vitest",
+		"test:e2e": "playwright test",
+		"test": "pnpm run test:unit && pnpm run test:e2e",
+		"verify": "pnpm run lint && pnpm run check && pnpm run typecheck && pnpm run test:unit && pnpm run build"
+	},
+	"devDependencies": {
+		"@axe-core/playwright": "^4.14.0",
+		"@eslint/js": "^10.0.1",
+		"@lhci/cli": "^0.15.1",
+		"@playwright/test": "^1.60.0",
+		"@sveltejs/adapter-vercel": "^7.0.0",
+		"@sveltejs/kit": "^3.0.0",
+		"@sveltejs/vite-plugin-svelte": "^7.2.0",
+		"@types/node": "^22",
+		"autoprefixer": "^10.6.1",
+		"eslint": "^10.4.1",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-svelte": "^3.19.0",
+		"globals": "^17.6.0",
+		"husky": "^9.1.7",
+		"lint-staged": "^17.6.0",
+		"postcss": "^8.5.31",
+		"prettier": "^3.8.3",
+		"prettier-plugin-svelte": "^4.1.0",
+		"svelte": "^5.57.1",
+		"svelte-check": "^4.6.0",
+		"tailwindcss": "^3.4.19",
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.60.1",
+		"vite": "^8.3.0",
+		"vitest": "^4.1.8"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
+	},
+	"dependencies": {
+		"web-vitals": "^6.2.3",
+		"zod": "^4.6.7"
+	},
+	"packageManager": "pnpm@10.34.6"
+}

@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	color-scheme: light;
+	--color-canvas: 248 250 252;
+	--color-surface: 255 255 255;
+	--color-foreground: 15 23 42;
+	--color-muted: 71 85 105;
+	--color-border: 203 213 225;
+	--color-accent: 29 78 216;
+	--color-accent-foreground: 255 255 255;
+	--space-page: clamp(1rem, 4vw, 2.5rem);
+	--space-section: clamp(3rem, 8vw, 6rem);
+	--radius-card: 1.25rem;
+	--radius-control: 0.75rem;
+	--font-sans: 'Inter';
+}
+
+:root.dark {
+	color-scheme: dark;
+	--color-canvas: 10 15 28;
+	--color-surface: 22 30 46;
+	--color-foreground: 241 245 249;
+	--color-muted: 148 163 184;
+	--color-border: 51 65 85;
+	--color-accent: 147 197 253;
+	--color-accent-foreground: 15 23 42;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not(.light) {
+		color-scheme: dark;
+		--color-canvas: 10 15 28;
+		--color-surface: 22 30 46;
+		--color-foreground: 241 245 249;
+		--color-muted: 148 163 184;
+		--color-border: 51 65 85;
+		--color-accent: 147 197 253;
+		--color-accent-foreground: 15 23 42;
+	}
+}
+
+@layer base {
+	html {
+		font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+		background: rgb(var(--color-canvas));
+		color: rgb(var(--color-foreground));
+	}
+	body {
+		min-width: 320px;
+	}
+	:focus-visible {
+		outline: 2px solid rgb(var(--color-accent));
+		outline-offset: 3px;
+	}
+}
