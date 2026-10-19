@@ -4,22 +4,24 @@ Keep route files thin. Put reusable presentation in `src/lib/components`, featur
 
 ## Boundaries
 
-| Area                        | Responsibility                                                                            |
-| --------------------------- | ----------------------------------------------------------------------------------------- |
-| `src/routes`                | SvelteKit load functions, actions, endpoint handlers, route layouts, and page composition |
-| `src/lib/components/ui`     | Small reusable token-driven components                                                    |
-| `src/lib/components/layout` | Shared navigation and page shells                                                         |
-| `src/lib/components/pages`  | Page-specific composed sections                                                           |
-| `src/lib/features/posts`    | Post schemas, URL state, and domain logic                                                 |
-| `src/lib/features/items`    | Item schemas, filters, pagination, edits                                                  |
-| `src/lib/features/auth`     | Shared login form schema and auth types                                                   |
-| `src/lib/server/data`       | Read/validate private JSON mocks and expose paginated data functions                      |
-| `src/lib/server/auth`       | Cookie session implementation and route protection                                        |
-| `src/lib/i18n`              | Locale selection and EN/DE UI dictionaries                                                |
-| `src/lib/seo`               | Canonicals, metadata, JSON-LD, sitemap helpers                                            |
-| `src/lib/observability`     | Web Vitals and client error beacons                                                       |
-| `src/lib/styles`            | Tailwind entry point and semantic CSS variables                                           |
-| `mocks`                     | Assignment data; server/build input, never served from `static`                           |
+| Area                         | Responsibility                                                                            |
+| ---------------------------- | ----------------------------------------------------------------------------------------- |
+| `src/routes`                 | SvelteKit load functions, actions, endpoint handlers, route layouts, and page composition |
+| `src/lib/components/ui`      | Small reusable token-driven components                                                    |
+| `src/lib/components/layout`  | Shared navigation and page shells                                                         |
+| `src/lib/components/pages`   | Page-specific composed sections                                                           |
+| `src/lib/features/posts`     | Post schemas, URL state, and mappers                                                      |
+| `src/lib/features/campaigns` | Campaign schemas, filters, pagination, edits                                              |
+| `src/lib/features/auth`      | Shared login form schema and auth types                                                   |
+| `src/lib/server/data`        | Read/validate private JSON mocks and expose paginated data functions                      |
+| `src/lib/server/auth`        | Cookie session implementation and route protection                                        |
+| `src/lib/i18n`               | Locale selection and EN/DE UI dictionaries                                                |
+| `src/lib/seo`                | Canonicals, metadata, JSON-LD, sitemap helpers                                            |
+| `src/lib/observability`      | Web Vitals and client error beacons                                                       |
+| `src/lib/styles`             | Tailwind entry point and semantic CSS variables                                           |
+| `mocks`                      | Assignment data; server/build input, never served from `static`                           |
+
+The assignment calls the source file `mocks/items.json` and requires `/dashboard/items`. Internally, those records are campaigns, so their schemas and data access live under `campaigns`.
 
 ## Route rendering plan
 
