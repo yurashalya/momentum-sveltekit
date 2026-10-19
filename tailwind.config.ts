@@ -20,6 +20,9 @@ export default {
 				'accent-hover': color('accent-hover'),
 				'accent-soft': color('accent-soft'),
 				'accent-foreground': color('accent-foreground'),
+				'action-foreground': color('action-foreground'),
+				highlight: color('highlight'),
+				'highlight-soft': color('highlight-soft'),
 				success: color('success'),
 				'success-soft': color('success-soft'),
 				warning: color('warning'),
@@ -30,6 +33,10 @@ export default {
 				'danger-foreground': color('danger-foreground'),
 				focus: color('focus'),
 				overlay: color('overlay')
+			},
+			backgroundImage: {
+				action: 'var(--gradient-action)',
+				panel: 'var(--gradient-panel)'
 			},
 			spacing: {
 				page: 'var(--space-page)',
@@ -46,7 +53,8 @@ export default {
 				pill: 'var(--radius-pill)'
 			},
 			boxShadow: {
-				card: 'var(--shadow-card)'
+				card: 'var(--shadow-card)',
+				action: 'var(--shadow-action)'
 			},
 			fontFamily: {
 				sans: ['var(--font-sans)']

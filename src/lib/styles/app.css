@@ -2,48 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-/* RGB triplets keep Tailwind opacity modifiers available, e.g. bg-overlay/60. */
+/* Dark is the default palette; .light changes the same semantic tokens. */
 :root {
-	color-scheme: light;
+	color-scheme: dark;
 
-	--color-canvas: 248 250 252;
-	--color-surface: 255 255 255;
-	--color-surface-muted: 241 245 249;
-	--color-surface-raised: 255 255 255;
-	--color-foreground: 15 23 42;
-	--color-muted: 71 85 105;
-	--color-border: 203 213 225;
-	--color-border-strong: 148 163 184;
-	--color-accent: 29 78 216;
-	--color-accent-hover: 30 64 175;
-	--color-accent-soft: 219 234 254;
-	--color-accent-foreground: 255 255 255;
-	--color-success: 22 101 52;
-	--color-success-soft: 220 252 231;
-	--color-warning: 146 64 14;
-	--color-warning-soft: 254 243 199;
-	--color-danger: 185 28 28;
-	--color-danger-hover: 153 27 27;
-	--color-danger-soft: 254 226 226;
-	--color-danger-foreground: 255 255 255;
-	--color-focus: 29 78 216;
-	--color-overlay: 2 6 23;
+	--color-canvas: 8 10 17;
+	--color-surface: 16 19 29;
+	--color-surface-muted: 23 27 39;
+	--color-surface-raised: 29 34 48;
+	--color-foreground: 248 250 252;
+	--color-muted: 174 184 199;
+	--color-border: 58 64 82;
+	--color-border-strong: 107 114 136;
+	--color-accent: 196 181 253;
+	--color-accent-hover: 221 214 254;
+	--color-accent-soft: 44 34 79;
+	--color-accent-foreground: 21 16 39;
+	--color-action-foreground: 255 255 255;
+	--color-highlight: 94 234 212;
+	--color-highlight-soft: 12 57 53;
+	--color-success: 94 234 212;
+	--color-success-soft: 12 57 53;
+	--color-warning: 252 211 77;
+	--color-warning-soft: 69 49 14;
+	--color-danger: 254 169 179;
+	--color-danger-hover: 255 197 204;
+	--color-danger-soft: 75 29 41;
+	--color-danger-foreground: 38 9 17;
+	--color-focus: 196 181 253;
+	--color-overlay: 0 0 0;
 
-	--space-page: clamp(1rem, 4vw, 2.5rem);
-	--space-section: clamp(3rem, 8vw, 6rem);
-	--space-card: clamp(1rem, 2vw, 1.5rem);
+	--gradient-action: linear-gradient(105deg, #5b3bd9 0%, #8f35b8 52%, #ad285f 100%);
+	--gradient-panel: linear-gradient(145deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.012));
+	--shadow-card: 0 24px 70px rgb(0 0 0 / 0.28), inset 0 1px 0 rgb(255 255 255 / 0.05);
+	--shadow-action: 0 14px 38px rgb(91 59 217 / 0.24), inset 0 1px 0 rgb(255 255 255 / 0.18);
+
+	--space-page: clamp(1.25rem, 4vw, 2.5rem);
+	--space-section: clamp(3.5rem, 8vw, 6.5rem);
+	--space-card: clamp(1.25rem, 2vw, 1.75rem);
 	--space-field: 0.75rem;
-	--width-content: 72rem;
-	--radius-card: 1.25rem;
-	--radius-control: 0.75rem;
+	--width-content: 77.5rem;
+	--radius-card: 1.5rem;
+	--radius-control: 0.875rem;
 	--radius-pill: 9999px;
-	--shadow-card: 0 12px 32px rgb(15 23 42 / 0.08);
 
 	--font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-	--font-size-display: clamp(2.5rem, 5vw, 4.5rem);
-	--line-height-display: 1.08;
-	--font-size-heading: clamp(1.875rem, 3vw, 2.75rem);
-	--line-height-heading: 1.15;
+	--font-size-display: clamp(2.75rem, 5vw, 4.75rem);
+	--line-height-display: 1.07;
+	--font-size-heading: clamp(2rem, 3vw, 3rem);
+	--line-height-heading: 1.12;
 	--font-size-subheading: 1.25rem;
 	--line-height-subheading: 1.35;
 	--font-size-body: 1rem;
@@ -52,58 +59,36 @@
 	--line-height-caption: 1.45;
 }
 
-:root.dark {
-	color-scheme: dark;
-	--color-canvas: 10 15 28;
-	--color-surface: 22 30 46;
-	--color-surface-muted: 30 41 59;
-	--color-surface-raised: 38 52 73;
-	--color-foreground: 241 245 249;
-	--color-muted: 148 163 184;
-	--color-border: 71 85 105;
-	--color-border-strong: 100 116 139;
-	--color-accent: 147 197 253;
-	--color-accent-hover: 191 219 254;
-	--color-accent-soft: 30 58 95;
-	--color-accent-foreground: 15 23 42;
-	--color-success: 134 239 172;
-	--color-success-soft: 5 46 22;
-	--color-warning: 252 211 77;
-	--color-warning-soft: 69 26 3;
-	--color-danger: 252 165 165;
-	--color-danger-hover: 254 202 202;
-	--color-danger-soft: 69 10 10;
-	--color-danger-foreground: 69 10 10;
-	--color-focus: 147 197 253;
-	--shadow-card: 0 16px 40px rgb(0 0 0 / 0.25);
-}
-
-@media (prefers-color-scheme: dark) {
-	:root:not(.light) {
-		color-scheme: dark;
-		--color-canvas: 10 15 28;
-		--color-surface: 22 30 46;
-		--color-surface-muted: 30 41 59;
-		--color-surface-raised: 38 52 73;
-		--color-foreground: 241 245 249;
-		--color-muted: 148 163 184;
-		--color-border: 71 85 105;
-		--color-border-strong: 100 116 139;
-		--color-accent: 147 197 253;
-		--color-accent-hover: 191 219 254;
-		--color-accent-soft: 30 58 95;
-		--color-accent-foreground: 15 23 42;
-		--color-success: 134 239 172;
-		--color-success-soft: 5 46 22;
-		--color-warning: 252 211 77;
-		--color-warning-soft: 69 26 3;
-		--color-danger: 252 165 165;
-		--color-danger-hover: 254 202 202;
-		--color-danger-soft: 69 10 10;
-		--color-danger-foreground: 69 10 10;
-		--color-focus: 147 197 253;
-		--shadow-card: 0 16px 40px rgb(0 0 0 / 0.25);
-	}
+:root.light {
+	color-scheme: light;
+	--color-canvas: 247 247 251;
+	--color-surface: 255 255 255;
+	--color-surface-muted: 244 242 249;
+	--color-surface-raised: 255 255 255;
+	--color-foreground: 25 23 39;
+	--color-muted: 82 80 101;
+	--color-border: 211 209 222;
+	--color-border-strong: 150 145 169;
+	--color-accent: 91 59 217;
+	--color-accent-hover: 75 45 191;
+	--color-accent-soft: 237 232 255;
+	--color-accent-foreground: 255 255 255;
+	--color-action-foreground: 255 255 255;
+	--color-highlight: 15 118 110;
+	--color-highlight-soft: 221 250 245;
+	--color-success: 15 118 110;
+	--color-success-soft: 221 250 245;
+	--color-warning: 146 64 14;
+	--color-warning-soft: 254 243 199;
+	--color-danger: 185 28 28;
+	--color-danger-hover: 153 27 27;
+	--color-danger-soft: 254 226 226;
+	--color-danger-foreground: 255 255 255;
+	--color-focus: 91 59 217;
+	--color-overlay: 8 10 17;
+	--gradient-panel: linear-gradient(145deg, rgb(255 255 255 / 1), rgb(249 247 255 / 0.96));
+	--shadow-card: 0 18px 40px rgb(35 21 73 / 0.08), inset 0 1px 0 rgb(255 255 255 / 0.8);
+	--shadow-action: 0 12px 30px rgb(91 59 217 / 0.18), inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
 @layer base {
@@ -115,6 +100,12 @@
 	body {
 		min-width: 320px;
 	}
+	button,
+	input,
+	select,
+	textarea {
+		font: inherit;
+	}
 	:focus-visible {
 		outline: 2px solid rgb(var(--color-focus));
 		outline-offset: 3px;
@@ -122,5 +113,42 @@
 	::selection {
 		background: rgb(var(--color-accent-soft));
 		color: rgb(var(--color-foreground));
+	}
+}
+
+@layer components {
+	.ui-field-label {
+		@apply text-caption font-semibold text-foreground;
+	}
+	.ui-field-control {
+		@apply w-full rounded-control border border-border-strong bg-surface-raised/60 px-3.5 py-2.5 text-body text-foreground transition-colors placeholder:text-muted;
+	}
+	.ui-field-control:hover:not(:disabled) {
+		@apply border-accent/70;
+	}
+	.ui-field-control:focus-visible {
+		@apply border-focus outline-none ring-2 ring-focus/25;
+	}
+	.ui-field-control[aria-invalid='true'] {
+		@apply border-danger;
+	}
+	.ui-field-control:disabled {
+		@apply cursor-not-allowed opacity-50;
+	}
+	.ui-field-hint {
+		@apply text-caption text-muted;
+	}
+	.ui-field-error {
+		@apply text-caption text-danger;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
 	}
 }

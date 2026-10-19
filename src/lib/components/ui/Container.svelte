@@ -10,6 +10,6 @@
 	} = $props();
 </script>
 
-<div class={`mx-auto w-full max-w-5xl px-page ${className}`}>
+<div class={`mx-auto w-full max-w-content px-page ${className}`}>
 	{@render children()}
 </div>
