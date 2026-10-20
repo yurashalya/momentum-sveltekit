@@ -94,6 +94,7 @@
 @layer base {
 	html {
 		font-family: var(--font-sans);
+		scroll-behavior: smooth;
 		background: rgb(var(--color-canvas));
 		color: rgb(var(--color-foreground));
 	}
@@ -141,6 +142,12 @@
 	.ui-field-error {
 		@apply text-caption text-danger;
 	}
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 420ms;
+	animation-timing-function: ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {

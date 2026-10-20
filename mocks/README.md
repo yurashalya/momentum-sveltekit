@@ -41,3 +41,7 @@ All three accounts use the password `demo1234`:
 
 - The shape of `users.json` (we use it to test login).
 - The `id` and `slug` fields on `posts.json` (we link to specific posts during review).
+
+## Momentum UI strings
+
+The homepage adds `home.*`, public navigation, footer, and theme-control keys to both `i18n.en.json` and `i18n.de.json`. The English homepage is at `/`; the German version is at `/de`. Mock posts, campaigns, users, and tags are unchanged.

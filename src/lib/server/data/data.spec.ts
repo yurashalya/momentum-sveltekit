@@ -8,6 +8,7 @@ import { campaignSchema, campaignsSchema } from '#lib/features/campaigns/schema.
 import { postSchema, postsSchema, tagsSchema } from '#lib/features/posts/schema.js';
 import { summarizePost } from '#lib/features/posts/mappers/post.js';
 import { parseSearchState } from '#lib/features/posts/search-state.js';
+import { LOCALE } from '#lib/i18n/index.js';
 import { parseCampaignListParams, getCampaignPage, renameCampaign } from './campaigns.js';
 import { getPost, listPosts, listTags, searchPosts } from './posts.js';
 import { authenticate, getUser } from './users.js';
@@ -82,14 +83,16 @@ describe('server-side campaign queries', () => {
 
 describe('posts and authentication', () => {
 	it('searches localized text and applies the tag and date order', () => {
-		const localized = searchPosts(parseSearchState(new URLSearchParams('q=Sekunde')), 'de');
+		const localized = searchPosts(parseSearchState(new URLSearchParams('q=Sekunde')), LOCALE.DE);
 		expect(localized.map((post) => post.slug)).toContain(rawPosts[0].slug);
 		expect(
-			searchPosts(parseSearchState(new URLSearchParams('q=Sekunde')), 'en').map((post) => post.slug)
+			searchPosts(parseSearchState(new URLSearchParams('q=Sekunde')), LOCALE.EN).map(
+				(post) => post.slug
+			)
 		).not.toContain(rawPosts[0].slug);
 		const filtered = searchPosts(
 			parseSearchState(new URLSearchParams('tag=engineering&sort=oldest')),
-			'en'
+			LOCALE.EN
 		);
 		expect(filtered.length).toBeGreaterThan(0);
 		expect(filtered.every((post) => post.tags.includes('engineering'))).toBe(true);
@@ -97,9 +100,9 @@ describe('posts and authentication', () => {
 			[...filtered.map((post) => post.publishedAt)].sort()
 		);
 		expect(getPost(rawPosts[0].slug)?.id).toBe(rawPosts[0].id);
-		expect(summarizePost(listPosts()[0], 'de')).toMatchObject({
+		expect(summarizePost(listPosts()[0], LOCALE.DE)).toMatchObject({
 			slug: rawPosts[0].slug,
-			title: rawPosts[0].translations.de.title
+			title: rawPosts[0].translations[LOCALE.DE].title
 		});
 	});
 

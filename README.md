@@ -1,6 +1,6 @@
 # Momentum
 
-SvelteKit 3 + Svelte 5 + TypeScript foundation for the senior frontend take-home. The repository currently has the tooling, design tokens, starter page, and original assignment mocks. Product routes are the next implementation stage.
+SvelteKit 3 + Svelte 5 + TypeScript implementation of the senior frontend take-home. The repository has the tooling, semantic design tokens, reusable UI primitives, validated mock data, and a pre-rendered marketing homepage. Blog, search, and dashboard routes are the next implementation stages.
 
 ## Requirements
 
@@ -33,4 +33,4 @@ Husky runs lint-staged before each commit. Staged TypeScript, JavaScript, and Sv
 
 See the [architecture plan](docs/architecture.md) and [design tokens](docs/design-system.md). Original JSON data is under `mocks/` and never publicly exposed through `static/`. The search URL codec lives in `src/lib/features/posts`; reusable UI starts in `src/lib/components/ui`.
 
-The dashboard, real authentication, EN/DE routes, production SEO, observability, performance budgets, and full test flows are not implemented in this setup phase. Demo credentials will be documented when login is implemented.
+The dashboard, mock authentication with real cookie sessions, EN/DE routes, remaining production SEO, observability, performance budgets, and full test flows are not implemented yet. Homepage pricing and testimonials are explicitly illustrative. Demo credentials will be documented when login is implemented.

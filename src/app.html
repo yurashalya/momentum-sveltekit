@@ -4,6 +4,16 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="text-scale" content="scale" />
+		<script>
+			try {
+				document.documentElement.classList.toggle(
+					'light',
+					localStorage.getItem('momentum-theme') === 'light'
+				);
+			} catch {
+				document.documentElement.classList.remove('light');
+			}
+		</script>
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

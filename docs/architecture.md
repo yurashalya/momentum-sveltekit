@@ -27,7 +27,7 @@ The assignment calls the source file `mocks/items.json` and requires `/dashboard
 
 | Route                   | Rendering               | Runtime     | Reason                                          |
 | ----------------------- | ----------------------- | ----------- | ----------------------------------------------- |
-| `/`                     | Pre-rendered            | Build       | Stable marketing content and fast first paint   |
+| `/` and `/de`           | Pre-rendered            | Build       | Stable marketing content and fast first paint   |
 | `/[locale]/blog`        | Pre-rendered, paginated | Build       | Twenty local posts; indexable pages             |
 | `/[locale]/blog/[slug]` | Pre-rendered            | Build       | Known slugs and locale-specific SEO             |
 | `/search`               | SSR                     | Vercel Edge | URL-driven query with a light in-memory index   |
@@ -35,12 +35,12 @@ The assignment calls the source file `mocks/items.json` and requires `/dashboard
 | `/dashboard`            | SSR                     | Node        | Protected request data                          |
 | `/dashboard/items`      | Streamed SSR            | Node        | Send shell before paginated row promise settles |
 
-These choices are planned, not yet implemented. The current repository contains only the foundation and a starter page.
+Both localized homepage variants are pre-rendered. The remaining route rendering choices are planned and will be verified as their routes are implemented.
 
 ## State and data flow
 
 - Parse search/table filters from the URL; serialize them back for shareable links and history navigation.
-- Use Svelte 5 runes for local UI state. Keep form schemas shared between client and server; infer TypeScript types from Zod.
+- Use Svelte 5 runes for local UI state. Derive the locale from the URL in the root layout and provide it to descendants through typed context. Keep form schemas shared between client and server; infer TypeScript types from Zod.
 - Read the JSON mocks on the server, validate at the boundary, and expose query functions. Mutations use form actions/endpoints and invalidate only their affected data.
 - Keep authentication, credentials, and raw users data out of client bundles.
 - Use light/dark semantic CSS variables so components do not carry parallel theme classes.
