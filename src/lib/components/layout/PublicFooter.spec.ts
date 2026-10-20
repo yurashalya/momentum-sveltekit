@@ -12,6 +12,7 @@ it('renders the footer links and copy in the selected language', () => {
 	expect(body).toContain('>Funktionen</a>');
 	expect(body).toContain('>Preise</a>');
 	expect(body).toContain('>Geschichten</a>');
+	expect(body).toContain('href="/de/blog"');
 	expect(body).toContain('href="/de#top"');
 	expect(body).toContain('>Zurück nach oben ↑</a>');
 });

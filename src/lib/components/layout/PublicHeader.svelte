@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 	import favicon from '#lib/assets/favicon.svg';
 	import Container from '#lib/components/ui/Container.svelte';
 	import { useLocale } from '#lib/i18n/context.js';
 	import { LOCALE, t } from '#lib/i18n/index.js';
+	import { alternateLocaleHref } from '#lib/i18n/hrefs.js';
 	import { localeHomePath } from '#lib/i18n/paths.js';
-	import { publicSectionLinks } from './constants';
+	import { publicLinkHref, publicNavigationLinks } from './constants';
 	import ThemeToggle from './ThemeToggle.svelte';
 
 	const currentLocale = useLocale();
 	let locale = $derived(currentLocale());
 	let homeHref = $derived(resolve(localeHomePath(locale)));
+	let isBlogRoute = $derived(page.route.id?.startsWith('/[locale=locale]/blog') ?? false);
 </script>
 
 <a
@@ -35,10 +38,16 @@
 			aria-label={t(locale, 'nav.primaryLabel')}
 			class="order-3 flex w-full items-center gap-6 text-caption font-semibold text-muted sm:order-2 sm:ml-auto sm:w-auto"
 		>
-			{#each publicSectionLinks as link (link.href)}
+			{#each publicNavigationLinks as link (link.href)}
+				{@const isActive = link.href === 'blog' && isBlogRoute}
 				<a
-					href={resolve(`${localeHomePath(locale)}${link.href}`)}
-					class="transition-colors hover:text-foreground"
+					href={publicLinkHref(locale, link.href)}
+					aria-current={isActive
+						? page.route.id === '/[locale=locale]/blog'
+							? 'page'
+							: 'location'
+						: undefined}
+					class={`transition-colors hover:text-foreground ${isActive ? 'text-foreground' : ''}`}
 				>
 					{t(locale, link.labelKey)}
 				</a>
@@ -51,14 +60,14 @@
 				class="flex items-center gap-1 text-xs font-bold text-muted"
 			>
 				<a
-					href={resolve(localeHomePath(LOCALE.EN))}
+					href={alternateLocaleHref(page.route.id, page.params, LOCALE.EN)}
 					lang={LOCALE.EN}
 					aria-current={locale === LOCALE.EN ? 'page' : undefined}
 					class={`rounded-control px-2 py-1.5 transition-colors hover:text-foreground ${locale === LOCALE.EN ? 'bg-surface-raised text-foreground' : ''}`}
 					>EN<span class="sr-only"> — {t(locale, 'nav.languageEnglish')}</span></a
 				>
 				<a
-					href={resolve(localeHomePath(LOCALE.DE))}
+					href={alternateLocaleHref(page.route.id, page.params, LOCALE.DE)}
 					lang={LOCALE.DE}
 					aria-current={locale === LOCALE.DE ? 'page' : undefined}
 					class={`rounded-control px-2 py-1.5 transition-colors hover:text-foreground ${locale === LOCALE.DE ? 'bg-surface-raised text-foreground' : ''}`}

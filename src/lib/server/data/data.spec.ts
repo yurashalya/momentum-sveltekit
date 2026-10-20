@@ -10,7 +10,14 @@ import { summarizePost } from '#lib/features/posts/mappers/post.js';
 import { parseSearchState } from '#lib/features/posts/search-state.js';
 import { LOCALE } from '#lib/i18n/index.js';
 import { parseCampaignListParams, getCampaignPage, renameCampaign } from './campaigns.js';
-import { getPost, listPosts, listTags, searchPosts } from './posts.js';
+import {
+	getPost,
+	getPostPage,
+	listPostPageNumbers,
+	listPosts,
+	listTags,
+	searchPosts
+} from './posts.js';
 import { authenticate, getUser } from './users.js';
 
 describe('mock data boundary', () => {
@@ -78,6 +85,33 @@ describe('server-side campaign queries', () => {
 		} finally {
 			renameCampaign({ id: original.id, name: original.name });
 		}
+	});
+});
+
+describe('blog pagination', () => {
+	it('covers all 20 posts once, in newest-first order, across four pages', () => {
+		expect(listPostPageNumbers()).toEqual([1, 2, 3, 4]);
+		const pages = listPostPageNumbers().map((page) => getPostPage(LOCALE.EN, page)!);
+		expect(pages.map(({ posts }) => posts.length)).toEqual([6, 6, 6, 2]);
+		expect(pages[0]).toMatchObject({ page: 1, pageCount: 4, total: 20 });
+		expect(pages.flatMap(({ posts }) => posts.map(({ slug }) => slug))).toEqual(
+			[...rawPosts]
+				.sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+				.map(({ slug }) => slug)
+		);
+	});
+
+	it('localizes summaries and rejects invalid page numbers', () => {
+		const english = getPostPage(LOCALE.EN, 2)!;
+		const german = getPostPage(LOCALE.DE, 2)!;
+		expect(german.posts.map(({ slug }) => slug)).toEqual(english.posts.map(({ slug }) => slug));
+		expect(german.posts[0].title).toBe(
+			getPost(german.posts[0].slug)?.translations[LOCALE.DE].title
+		);
+		expect(german.posts[0].title).not.toBe(english.posts[0].title);
+		expect(getPostPage(LOCALE.EN, 0)).toBeUndefined();
+		expect(getPostPage(LOCALE.EN, 5)).toBeUndefined();
+		expect(getPostPage(LOCALE.EN, 1.5)).toBeUndefined();
 	});
 });
 

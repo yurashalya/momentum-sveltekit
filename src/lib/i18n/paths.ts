@@ -7,6 +7,13 @@ export const localeHomePaths = {
 
 export const localeHomePath = (locale: Locale) => localeHomePaths[locale];
 
+export const localeBlogPaths = {
+	[LOCALE.EN]: '/en/blog',
+	[LOCALE.DE]: '/de/blog'
+} as const satisfies Record<Locale, `/${string}`>;
+
+export const localeBlogPath = (locale: Locale) => localeBlogPaths[locale];
+
 export const localeFromPath = (pathname: string): Locale => {
 	for (const locale of locales) {
 		const homePath = localeHomePath(locale);

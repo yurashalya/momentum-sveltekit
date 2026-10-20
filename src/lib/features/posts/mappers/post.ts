@@ -12,3 +12,13 @@ export const summarizePost = (post: Post, locale: Locale) => {
 		coverColor: post.coverColor
 	};
 };
+
+export type PostSummary = ReturnType<typeof summarizePost>;
+
+export const mapPostArticle = (post: Post, locale: Locale) => ({
+	...summarizePost(post, locale),
+	body: post.translations[locale].body,
+	author: post.author
+});
+
+export type PostArticle = ReturnType<typeof mapPostArticle>;

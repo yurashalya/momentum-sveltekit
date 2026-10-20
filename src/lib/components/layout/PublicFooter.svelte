@@ -5,7 +5,7 @@
 	import { useLocale } from '#lib/i18n/context.js';
 	import { t } from '#lib/i18n/index.js';
 	import { localeHomePath } from '#lib/i18n/paths.js';
-	import { footerLinks } from './constants';
+	import { footerLinks, publicLinkHref } from './constants';
 
 	const currentLocale = useLocale();
 	let locale = $derived(currentLocale());
@@ -26,7 +26,7 @@
 			class="flex flex-wrap gap-x-6 gap-y-3 text-caption font-semibold text-muted"
 		>
 			{#each footerLinks as link (link.href)}
-				<a href={resolve(`${localeHomePath(locale)}${link.href}`)} class="hover:text-foreground"
+				<a href={publicLinkHref(locale, link.href)} class="hover:text-foreground"
 					>{t(locale, link.labelKey)}</a
 				>
 			{/each}
