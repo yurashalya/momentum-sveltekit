@@ -23,6 +23,15 @@ export const searchHref = (locale: Locale, searchParams?: { toString(): string }
 	return locale === LOCALE.DE ? resolve(`/de/search?${query}`) : resolve(`/search?${query}`);
 };
 
+export const dashboardHref = (locale: Locale) =>
+	locale === LOCALE.DE ? resolve('/de/dashboard') : resolve('/dashboard');
+
+export const dashboardItemsHref = (locale: Locale, searchParams?: { toString(): string }) => {
+	const path = locale === LOCALE.DE ? '/de/dashboard/items' : '/dashboard/items';
+	const query = searchParams?.toString();
+	return resolve(query ? `${path}?${query}` : path);
+};
+
 export const loginHref = (locale: Locale, searchParams?: { toString(): string }) => {
 	const params = new URLSearchParams(searchParams?.toString());
 	const next = params.get('next');

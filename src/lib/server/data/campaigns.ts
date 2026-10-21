@@ -5,28 +5,20 @@ import {
 	SORT_DIRECTION
 } from '#lib/features/campaigns/constants.js';
 import {
-	campaignListParamsSchema,
+	campaignOverviewSchema,
 	campaignsSchema,
 	renameCampaignSchema
 } from '#lib/features/campaigns/schema.js';
-import type { Campaign, CampaignListParams } from '#lib/features/campaigns/schema.js';
+import { parseCampaignListParams } from '#lib/features/campaigns/list-state.js';
+import type { Campaign, CampaignListParams, CampaignPage } from '#lib/features/campaigns/schema.js';
 
 const campaigns = campaignsSchema.parse(rawCampaigns);
 const editedNames = new Map<string, string>();
 export const pageSize = CAMPAIGN_PAGE_SIZE;
 
-export const parseCampaignListParams = (params: URLSearchParams): CampaignListParams => {
-	return campaignListParamsSchema.parse({
-		q: params.get('q') ?? CAMPAIGN_LIST_DEFAULTS.QUERY,
-		status: params.get('status') ?? CAMPAIGN_LIST_DEFAULTS.FILTER,
-		channel: params.get('channel') ?? CAMPAIGN_LIST_DEFAULTS.FILTER,
-		sort: params.get('sort') ?? CAMPAIGN_LIST_DEFAULTS.SORT,
-		dir: params.get('dir') ?? CAMPAIGN_LIST_DEFAULTS.DIRECTION,
-		page: params.get('page') ?? String(CAMPAIGN_LIST_DEFAULTS.PAGE)
-	});
-};
+export { parseCampaignListParams };
 
-export const getCampaignPage = (params: CampaignListParams) => {
+export const getCampaignPage = (params: CampaignListParams): CampaignPage => {
 	const needle = params.q.toLowerCase();
 	const matching = campaigns
 		.map((campaign) => ({ ...campaign, name: editedNames.get(campaign.id) ?? campaign.name }))
@@ -56,10 +48,35 @@ export const getCampaignPage = (params: CampaignListParams) => {
 	};
 };
 
+export const getCampaignOverview = () => {
+	const recent = [...campaigns]
+		.sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+		.slice(0, 4)
+		.map((campaign) => ({ ...campaign, name: editedNames.get(campaign.id) ?? campaign.name }));
+	return campaignOverviewSchema.parse({
+		total: campaigns.length,
+		active: campaigns.filter((campaign) => campaign.status === 'active').length,
+		scheduled: campaigns.filter((campaign) => campaign.status === 'scheduled').length,
+		budget: campaigns.reduce((total, campaign) => total + campaign.budget, 0),
+		recent
+	});
+};
+
+export const queryCampaignPage = async (params: CampaignListParams): Promise<CampaignPage> => {
+	await new Promise((resolve) => setTimeout(resolve, 160));
+	return getCampaignPage(params);
+};
+
+export const getCampaign = (id: string): Campaign | undefined => {
+	const campaign = campaigns.find((row) => row.id === id);
+	return campaign ? { ...campaign, name: editedNames.get(id) ?? campaign.name } : undefined;
+};
+
 export const renameCampaign = (input: unknown): Campaign => {
 	const { id, name } = renameCampaignSchema.parse(input);
 	const campaign = campaigns.find((row) => row.id === id);
 	if (!campaign) throw new Error('Campaign not found');
+	if (campaign.status === 'archived') throw new Error('Archived campaign cannot be renamed');
 	editedNames.set(id, name);
 	return { ...campaign, name };
 };

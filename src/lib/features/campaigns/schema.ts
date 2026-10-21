@@ -30,6 +30,26 @@ export const campaignSchema = z.object({
 
 export const campaignsSchema = z.array(campaignSchema);
 export type Campaign = z.infer<typeof campaignSchema>;
+export type CampaignStatus = z.infer<typeof campaignStatusSchema>;
+export type CampaignChannel = z.infer<typeof campaignChannelSchema>;
+
+export const campaignPageSchema = z.object({
+	rows: campaignsSchema,
+	total: z.number().int().nonnegative(),
+	page: z.number().int().positive(),
+	pageCount: z.number().int().positive(),
+	pageSize: z.number().int().positive()
+});
+export type CampaignPage = z.infer<typeof campaignPageSchema>;
+
+export const campaignOverviewSchema = z.object({
+	total: z.number().int().nonnegative(),
+	active: z.number().int().nonnegative(),
+	scheduled: z.number().int().nonnegative(),
+	budget: z.number().nonnegative(),
+	recent: campaignsSchema
+});
+export type CampaignOverview = z.infer<typeof campaignOverviewSchema>;
 
 export const renameCampaignSchema = z.object({
 	id: z.string().min(1),
@@ -50,3 +70,9 @@ export const campaignListParamsSchema = z.object({
 	page: z.coerce.number().int().min(CAMPAIGN_LIST_DEFAULTS.PAGE).catch(CAMPAIGN_LIST_DEFAULTS.PAGE)
 });
 export type CampaignListParams = z.infer<typeof campaignListParamsSchema>;
+
+export const campaignMutationErrorSchema = z.object({
+	code: z.enum(['invalid', 'unauthorized', 'forbidden', 'notFound', 'archived', 'unexpected'])
+});
+export type CampaignMutationError = z.infer<typeof campaignMutationErrorSchema>;
+export const campaignMutationSuccessSchema = z.object({ campaign: campaignSchema });

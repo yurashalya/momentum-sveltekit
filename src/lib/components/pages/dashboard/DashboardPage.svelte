@@ -1,20 +1,30 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import favicon from '#lib/assets/favicon.svg';
+	import Badge from '#lib/components/ui/Badge.svelte';
 	import Card from '#lib/components/ui/Card.svelte';
 	import Container from '#lib/components/ui/Container.svelte';
 	import Heading from '#lib/components/ui/Heading.svelte';
 	import type { PublicUser } from '#lib/features/auth/schema.js';
+	import type { CampaignOverview } from '#lib/features/campaigns/schema.js';
 	import { useLocale } from '#lib/i18n/context.js';
-	import { LOCALE, t } from '#lib/i18n/index.js';
-	import { localeHomePath } from '#lib/i18n/paths.js';
+	import { formatCurrency, formatDate, formatNumber, t } from '#lib/i18n/index.js';
+	import { dashboardItemsHref } from '#lib/i18n/hrefs.js';
+	import { campaignStatusLabelKeys, campaignStatusVariants } from './constants.js';
 
-	let { user }: { user: PublicUser } = $props();
+	let { user, overview }: { user: PublicUser; overview: CampaignOverview } = $props();
 	const currentLocale = useLocale();
 	let locale = $derived(currentLocale());
-	let logoutHref = $derived(
-		locale === LOCALE.DE ? resolve('/logout?locale=de') : resolve('/logout')
-	);
+	let statistics = $derived([
+		{ label: t(locale, 'dashboard.overview.total'), value: formatNumber(overview.total, locale) },
+		{ label: t(locale, 'dashboard.overview.active'), value: formatNumber(overview.active, locale) },
+		{
+			label: t(locale, 'dashboard.overview.scheduled'),
+			value: formatNumber(overview.scheduled, locale)
+		},
+		{
+			label: t(locale, 'dashboard.overview.budget'),
+			value: formatCurrency(overview.budget, locale)
+		}
+	]);
 </script>
 
 <svelte:head>
@@ -22,56 +32,54 @@
 	<meta name="robots" content="noindex,nofollow" />
 </svelte:head>
 
-<div class="min-h-screen bg-canvas text-foreground">
-	<header class="border-b border-border/60 bg-canvas/90 py-4">
-		<Container class="flex items-center justify-between gap-4">
-			<a
-				href={resolve(localeHomePath(locale))}
-				class="inline-flex items-center gap-3 font-bold tracking-tight text-foreground"
-			>
-				<img src={favicon} alt="" width="36" height="36" class="h-9 w-9" />
-				Momentum
-			</a>
-			<nav
-				aria-label={t(locale, 'nav.languageLabel')}
-				class="ml-auto flex items-center gap-2 text-xs font-bold text-muted"
-			>
+<main id="main" class="flex-1 py-section">
+	<Container>
+		<p class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-accent">
+			{t(locale, 'dashboard.eyebrow')}
+		</p>
+		<Heading level={1}>{t(locale, 'dashboard.title')}</Heading>
+		<p class="mt-5 max-w-2xl text-lg text-muted">
+			{t(locale, 'dashboard.welcome', { name: user.name })}
+		</p>
+		<div class="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+			{#each statistics as statistic (statistic.label)}
+				<Card variant="muted" class="min-h-32">
+					<p class="text-caption text-muted">{statistic.label}</p>
+					<p class="mt-5 text-subheading font-bold tracking-tight">{statistic.value}</p>
+				</Card>
+			{/each}
+		</div>
+		<section class="mt-12" aria-labelledby="recent-campaigns-title">
+			<div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+				<div>
+					<h2 id="recent-campaigns-title" class="text-subheading font-bold tracking-tight">
+						{t(locale, 'dashboard.overview.recentTitle')}
+					</h2>
+					<p class="mt-2 text-caption text-muted">{t(locale, 'dashboard.overview.recentHint')}</p>
+				</div>
 				<a
-					href={resolve('/dashboard')}
-					lang="en"
-					aria-current={locale === LOCALE.EN ? 'page' : undefined}
-					class={locale === LOCALE.EN ? 'text-foreground' : 'hover:text-foreground'}>EN</a
+					href={dashboardItemsHref(locale)}
+					class="rounded-control border border-border-strong px-4 py-2 text-caption font-bold text-foreground transition-colors hover:border-accent hover:bg-surface-raised"
+					>{t(locale, 'dashboard.overview.viewAll')} →</a
 				>
-				<a
-					href={resolve('/de/dashboard')}
-					lang="de"
-					aria-current={locale === LOCALE.DE ? 'page' : undefined}
-					class={locale === LOCALE.DE ? 'text-foreground' : 'hover:text-foreground'}>DE</a
-				>
-			</nav>
-			<form method="POST" action={logoutHref}>
-				<button
-					type="submit"
-					class="rounded-control border border-border-strong px-4 py-2 text-caption font-semibold text-foreground transition-colors hover:border-accent hover:bg-surface-raised"
-				>
-					{t(locale, 'nav.logout')}
-				</button>
-			</form>
-		</Container>
-	</header>
-	<main id="main" class="py-section">
-		<Container>
-			<p class="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-accent">
-				{t(locale, 'dashboard.eyebrow')}
-			</p>
-			<Heading level={1}>{t(locale, 'dashboard.title')}</Heading>
-			<p class="mt-5 max-w-2xl text-lg text-muted">
-				{t(locale, 'dashboard.welcome', { name: user.name })}
-			</p>
-			<Card class="mt-10 max-w-2xl">
-				<Heading level={2} class="text-subheading">{t(locale, 'dashboard.previewTitle')}</Heading>
-				<p class="mt-3 text-caption text-muted">{t(locale, 'dashboard.previewText')}</p>
+			</div>
+			<Card padding="none" class="overflow-hidden">
+				<ul class="divide-y divide-border/60">
+					{#each overview.recent as campaign (campaign.id)}
+						<li class="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
+							<div>
+								<p class="font-semibold">{campaign.name}</p>
+								<p class="mt-1 text-caption text-muted">
+									{campaign.owner.name} · {formatDate(campaign.updatedAt, locale)}
+								</p>
+							</div>
+							<Badge variant={campaignStatusVariants[campaign.status]}
+								>{t(locale, campaignStatusLabelKeys[campaign.status])}</Badge
+							>
+						</li>
+					{/each}
+				</ul>
 			</Card>
-		</Container>
-	</main>
-</div>
+		</section>
+	</Container>
+</main>

@@ -1,6 +1,6 @@
 # Momentum
 
-SvelteKit 3 + Svelte 5 + TypeScript implementation of the senior frontend take-home. The repository has the tooling, semantic design tokens, reusable UI primitives, validated mock data, a pre-rendered marketing homepage, a localized blog, and URL-driven SSR post search. Sign-in and a protected dashboard entry are implemented; the campaign table is the next implementation stage.
+SvelteKit 3 + Svelte 5 + TypeScript implementation of the senior frontend take-home. The repository has the tooling, semantic design tokens, reusable UI primitives, validated mock data, a pre-rendered marketing homepage, a localized blog, and URL-driven SSR post search. Sign-in and a protected dashboard with a campaign table are implemented.
 
 ## Requirements
 
@@ -22,7 +22,7 @@ Open `/login` or `/de/login` and use:
 - Admin: `admin@demo.test` / `demo1234`
 - Viewer: `viewer@demo.test` / `demo1234`
 
-The form validates with the same Zod schema on the client and server. Successful login sets a signed, HttpOnly, SameSite cookie that expires after 12 hours. `/dashboard` and `/de/dashboard` require a valid session; sign out clears the cookie.
+The form validates with the same Zod schema on the client and server. Successful login sets a signed, HttpOnly, SameSite cookie that expires after 12 hours. `/dashboard`, `/de/dashboard`, and their `/items` routes require a valid session; sign out clears the cookie. The dashboard shows campaign totals and recent activity. Its campaign table supports URL-driven search, filters, sorting, and pagination, plus inline name edits for editors and admins. Archived campaigns reject renaming to demonstrate optimistic rollback. Successful edits persist only in the running server process and reset after restart.
 
 ## Checks
 
@@ -43,4 +43,4 @@ Husky runs lint-staged before each commit. Staged TypeScript, JavaScript, and Sv
 
 See the [architecture plan](docs/architecture.md) and [design tokens](docs/design-system.md). Original JSON data is under `mocks/` and never publicly exposed through `static/`. The search URL codec lives in `src/lib/features/posts`; reusable UI starts in `src/lib/components/ui`.
 
-The blog has pre-rendered lists at `/en/blog` and `/de/blog`, four URL-addressable pages per locale, and localized article URLs. `/blog` redirects to `/en/blog`. Numbered pagination keeps all 20 mock posts reachable with stable URLs for sharing, search indexing, and keyboard navigation. Post search is available at `/search` and `/de/search`; `q`, `tag`, and `sort` round-trip through the URL, including language switching and browser history. The campaign table, remaining production SEO, observability, performance budgets, and the authenticated edit-and-rollback E2E flow are not implemented yet. Homepage pricing and testimonials are explicitly illustrative.
+The blog has pre-rendered lists at `/en/blog` and `/de/blog`, four URL-addressable pages per locale, and localized article URLs. `/blog` redirects to `/en/blog`. Numbered pagination keeps all 20 mock posts reachable with stable URLs for sharing, search indexing, and keyboard navigation. Post search is available at `/search` and `/de/search`; `q`, `tag`, and `sort` round-trip through the URL, including language switching and browser history. The dashboard campaign table and authenticated edit-and-rollback E2E flow are implemented. Remaining production SEO, observability, and performance budgets are still open. Homepage pricing and testimonials are explicitly illustrative.

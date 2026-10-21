@@ -38,7 +38,7 @@
 	--shadow-action: 0 14px 38px rgb(91 59 217 / 0.24), inset 0 1px 0 rgb(255 255 255 / 0.18);
 
 	--space-page: clamp(1.25rem, 4vw, 2.5rem);
-	--space-section: clamp(3.5rem, 8vw, 6.5rem);
+	--space-section: clamp(3.5rem, 8vw, 1.5rem);
 	--space-card: clamp(1.25rem, 2vw, 1.75rem);
 	--space-field: 0.75rem;
 	--width-content: 77.5rem;
