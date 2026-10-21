@@ -5,7 +5,7 @@
 	import Container from '#lib/components/ui/Container.svelte';
 	import { useLocale } from '#lib/i18n/context.js';
 	import { LOCALE, t } from '#lib/i18n/index.js';
-	import { alternateLocaleHref } from '#lib/i18n/hrefs.js';
+	import { alternateLocaleHref, loginHref } from '#lib/i18n/hrefs.js';
 	import { localeHomePath } from '#lib/i18n/paths.js';
 	import { publicLinkHref, publicNavigationLinks } from './constants';
 	import ThemeToggle from './ThemeToggle.svelte';
@@ -15,7 +15,10 @@
 	let homeHref = $derived(resolve(localeHomePath(locale)));
 	let isBlogRoute = $derived(page.route.id?.startsWith('/[locale=locale]/blog') ?? false);
 	let isSearchRoute = $derived(page.route.id === '/search' || page.route.id === '/de/search');
-	let searchParams = $derived(isSearchRoute ? page.url.searchParams : undefined);
+	let isLoginRoute = $derived(page.route.id === '/login' || page.route.id === '/de/login');
+	let routeSearchParams = $derived(
+		isSearchRoute || isLoginRoute ? page.url.searchParams : undefined
+	);
 </script>
 
 <a
@@ -58,19 +61,25 @@
 		</nav>
 
 		<div class="order-2 ml-auto flex items-center gap-3 sm:order-3 sm:ml-0">
+			<a
+				href={loginHref(locale)}
+				aria-current={isLoginRoute ? 'page' : undefined}
+				class={`rounded-control border border-border-strong px-3 py-1.5 text-xs font-bold transition-colors hover:border-accent hover:text-foreground ${isLoginRoute ? 'bg-surface-raised text-foreground' : 'text-muted'}`}
+				>{t(locale, 'nav.login')}</a
+			>
 			<nav
 				aria-label={t(locale, 'nav.languageLabel')}
 				class="flex items-center gap-1 text-xs font-bold text-muted"
 			>
 				<a
-					href={alternateLocaleHref(page.route.id, page.params, LOCALE.EN, searchParams)}
+					href={alternateLocaleHref(page.route.id, page.params, LOCALE.EN, routeSearchParams)}
 					lang={LOCALE.EN}
 					aria-current={locale === LOCALE.EN ? 'page' : undefined}
 					class={`rounded-control px-2 py-1.5 transition-colors hover:text-foreground ${locale === LOCALE.EN ? 'bg-surface-raised text-foreground' : ''}`}
 					>EN<span class="sr-only"> — {t(locale, 'nav.languageEnglish')}</span></a
 				>
 				<a
-					href={alternateLocaleHref(page.route.id, page.params, LOCALE.DE, searchParams)}
+					href={alternateLocaleHref(page.route.id, page.params, LOCALE.DE, routeSearchParams)}
 					lang={LOCALE.DE}
 					aria-current={locale === LOCALE.DE ? 'page' : undefined}
 					class={`rounded-control px-2 py-1.5 transition-colors hover:text-foreground ${locale === LOCALE.DE ? 'bg-surface-raised text-foreground' : ''}`}

@@ -1,8 +1,9 @@
 import { z } from 'zod';
+import { LOGIN_FIELD_MAX_LENGTH } from './constants.js';
 
 export const loginSchema = z.object({
-	email: z.string().trim().toLowerCase().pipe(z.email()),
-	password: z.string().min(1)
+	email: z.string().trim().toLowerCase().max(LOGIN_FIELD_MAX_LENGTH.email).pipe(z.email()),
+	password: z.string().min(1).max(LOGIN_FIELD_MAX_LENGTH.password).regex(/^\S+$/)
 });
 export type LoginInput = z.infer<typeof loginSchema>;
 

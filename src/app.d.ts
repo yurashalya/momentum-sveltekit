@@ -3,7 +3,9 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			user: import('#lib/features/auth/schema.js').PublicUser | null;
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}

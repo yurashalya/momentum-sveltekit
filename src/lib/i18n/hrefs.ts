@@ -23,6 +23,20 @@ export const searchHref = (locale: Locale, searchParams?: { toString(): string }
 	return locale === LOCALE.DE ? resolve(`/de/search?${query}`) : resolve(`/search?${query}`);
 };
 
+export const loginHref = (locale: Locale, searchParams?: { toString(): string }) => {
+	const params = new URLSearchParams(searchParams?.toString());
+	const next = params.get('next');
+	if (next && /^\/(?:de\/)?dashboard(?=\/|\?|$)/.test(next)) {
+		params.set(
+			'next',
+			next.replace(/^\/(?:de\/)?dashboard/, locale === LOCALE.DE ? '/de/dashboard' : '/dashboard')
+		);
+	}
+	const query = params.toString();
+	if (!query) return locale === LOCALE.DE ? resolve('/de/login') : resolve('/login');
+	return locale === LOCALE.DE ? resolve(`/de/login?${query}`) : resolve(`/login?${query}`);
+};
+
 export const postHref = (locale: Locale, slug: string) =>
 	resolve('/[locale=locale]/blog/[slug]', { locale, slug });
 
@@ -40,5 +54,6 @@ export const alternateLocaleHref = (
 	}
 	if (routeId === '/[locale=locale]/blog') return blogHref(locale);
 	if (routeId === '/search' || routeId === '/de/search') return searchHref(locale, searchParams);
+	if (routeId === '/login' || routeId === '/de/login') return loginHref(locale, searchParams);
 	return resolve(localeHomePath(locale));
 };

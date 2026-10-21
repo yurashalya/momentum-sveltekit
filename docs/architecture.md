@@ -35,7 +35,7 @@ The assignment calls the source file `mocks/items.json` and requires `/dashboard
 | `/dashboard`            | SSR                     | Node            | Protected request data                              |
 | `/dashboard/items`      | Streamed SSR            | Node            | Send shell before paginated row promise settles     |
 
-Both localized homepage variants and all blog routes are pre-rendered. `/blog` redirects to `/en/blog`; blog pagination uses `/[locale]/blog/page/[page]`, with six posts per page. Search is implemented as SSR on the adapter default Vercel Function runtime; it normalizes `q`, `tag`, and `sort` in the URL and uses the validated JSON data without a separate backend. The remaining route rendering choices are planned and will be verified as their routes are implemented.
+Both localized homepage variants and all blog routes are pre-rendered. `/blog` redirects to `/en/blog`; blog pagination uses `/[locale]/blog/page/[page]`, with six posts per page. Search is implemented as SSR on the adapter default Vercel Function runtime; it normalizes `q`, `tag`, and `sort` in the URL and uses the validated JSON data without a separate backend. The login routes use SvelteKit form actions and a signed HttpOnly cookie. A server hook verifies the cookie, and the dashboard layout redirects anonymous requests to login while preserving the requested path. The dashboard entry shell is implemented; the campaign table and its streamed load remain planned.
 
 ## State and data flow
 
