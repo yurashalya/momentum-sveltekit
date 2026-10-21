@@ -25,17 +25,17 @@ The assignment calls the source file `mocks/items.json` and requires `/dashboard
 
 ## Route rendering plan
 
-| Route                   | Rendering               | Runtime     | Reason                                              |
-| ----------------------- | ----------------------- | ----------- | --------------------------------------------------- |
-| `/` and `/de`           | Pre-rendered            | Build       | Stable marketing content and fast first paint       |
-| `/en/blog`, `/de/blog`  | Pre-rendered, paginated | Build       | Twenty local posts; four shareable pages per locale |
-| `/[locale]/blog/[slug]` | Pre-rendered            | Build       | Known slugs and locale-specific metadata            |
-| `/search`               | SSR                     | Vercel Edge | URL-driven query with a light in-memory index       |
-| `/login`                | SSR + form action       | Node        | Cookie/session handling                             |
-| `/dashboard`            | SSR                     | Node        | Protected request data                              |
-| `/dashboard/items`      | Streamed SSR            | Node        | Send shell before paginated row promise settles     |
+| Route                   | Rendering               | Runtime         | Reason                                              |
+| ----------------------- | ----------------------- | --------------- | --------------------------------------------------- |
+| `/` and `/de`           | Pre-rendered            | Build           | Stable marketing content and fast first paint       |
+| `/en/blog`, `/de/blog`  | Pre-rendered, paginated | Build           | Twenty local posts; four shareable pages per locale |
+| `/[locale]/blog/[slug]` | Pre-rendered            | Build           | Known slugs and locale-specific metadata            |
+| `/search`, `/de/search` | SSR                     | Vercel Function | URL-driven query over validated server-side mocks   |
+| `/login`                | SSR + form action       | Node            | Cookie/session handling                             |
+| `/dashboard`            | SSR                     | Node            | Protected request data                              |
+| `/dashboard/items`      | Streamed SSR            | Node            | Send shell before paginated row promise settles     |
 
-Both localized homepage variants and all blog routes are pre-rendered. `/blog` redirects to `/en/blog`; blog pagination uses `/[locale]/blog/page/[page]`, with six posts per page. The remaining route rendering choices are planned and will be verified as their routes are implemented.
+Both localized homepage variants and all blog routes are pre-rendered. `/blog` redirects to `/en/blog`; blog pagination uses `/[locale]/blog/page/[page]`, with six posts per page. Search is implemented as SSR on the adapter default Vercel Function runtime; it normalizes `q`, `tag`, and `sort` in the URL and uses the validated JSON data without a separate backend. The remaining route rendering choices are planned and will be verified as their routes are implemented.
 
 ## State and data flow
 

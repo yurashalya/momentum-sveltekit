@@ -4,7 +4,7 @@ import { BLOG_PAGE_SIZE, POST_SORT } from '#lib/features/posts/constants.js';
 import { summarizePost } from '#lib/features/posts/mappers/post.js';
 import { postsSchema, tagsSchema } from '#lib/features/posts/schema.js';
 import type { Post } from '#lib/features/posts/schema.js';
-import type { SearchState } from '#lib/features/posts/search-state.js';
+import { parseSearchState, type SearchState } from '#lib/features/posts/search-state.js';
 import type { Locale } from '#lib/i18n/index.js';
 
 const posts = postsSchema
@@ -58,4 +58,18 @@ export const searchPosts = (state: SearchState, locale: Locale): Post[] => {
 			? a.publishedAt.localeCompare(b.publishedAt)
 			: b.publishedAt.localeCompare(a.publishedAt);
 	});
+};
+
+export const getPostSearchResults = (params: URLSearchParams, locale: Locale) => {
+	const parsed = parseSearchState(params);
+	const state =
+		parsed.tag && !tags.some((tag) => tag.slug === parsed.tag) ? { ...parsed, tag: '' } : parsed;
+	const results = searchPosts(state, locale);
+
+	return {
+		state,
+		posts: results.map((post) => summarizePost(post, locale)),
+		total: results.length,
+		tags
+	};
 };

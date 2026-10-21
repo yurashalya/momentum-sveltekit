@@ -8,7 +8,7 @@
 	import { useLocale } from '#lib/i18n/context.js';
 	import { defaultLocale, formatNumber, LOCALE, t } from '#lib/i18n/index.js';
 	import { blogPageHref } from '#lib/i18n/hrefs.js';
-	import BlogCard from './components/BlogCard.svelte';
+	import PostCard from '#lib/components/posts/PostCard.svelte';
 	import BlogPagination from './components/BlogPagination.svelte';
 
 	let {
@@ -70,7 +70,7 @@
 				{:else}
 					<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 						{#each posts as post (post.slug)}
-							<BlogCard {post} {tags} />
+							<PostCard {post} {tags} />
 						{/each}
 					</div>
 					<BlogPagination {page} {pageCount} />

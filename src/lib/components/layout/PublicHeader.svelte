@@ -14,6 +14,8 @@
 	let locale = $derived(currentLocale());
 	let homeHref = $derived(resolve(localeHomePath(locale)));
 	let isBlogRoute = $derived(page.route.id?.startsWith('/[locale=locale]/blog') ?? false);
+	let isSearchRoute = $derived(page.route.id === '/search' || page.route.id === '/de/search');
+	let searchParams = $derived(isSearchRoute ? page.url.searchParams : undefined);
 </script>
 
 <a
@@ -39,11 +41,12 @@
 			class="order-3 flex w-full items-center gap-6 text-caption font-semibold text-muted sm:order-2 sm:ml-auto sm:w-auto"
 		>
 			{#each publicNavigationLinks as link (link.href)}
-				{@const isActive = link.href === 'blog' && isBlogRoute}
+				{@const isActive =
+					(link.href === 'blog' && isBlogRoute) || (link.href === 'search' && isSearchRoute)}
 				<a
 					href={publicLinkHref(locale, link.href)}
 					aria-current={isActive
-						? page.route.id === '/[locale=locale]/blog'
+						? page.route.id === '/[locale=locale]/blog' || isSearchRoute
 							? 'page'
 							: 'location'
 						: undefined}
@@ -60,14 +63,14 @@
 				class="flex items-center gap-1 text-xs font-bold text-muted"
 			>
 				<a
-					href={alternateLocaleHref(page.route.id, page.params, LOCALE.EN)}
+					href={alternateLocaleHref(page.route.id, page.params, LOCALE.EN, searchParams)}
 					lang={LOCALE.EN}
 					aria-current={locale === LOCALE.EN ? 'page' : undefined}
 					class={`rounded-control px-2 py-1.5 transition-colors hover:text-foreground ${locale === LOCALE.EN ? 'bg-surface-raised text-foreground' : ''}`}
 					>EN<span class="sr-only"> — {t(locale, 'nav.languageEnglish')}</span></a
 				>
 				<a
-					href={alternateLocaleHref(page.route.id, page.params, LOCALE.DE)}
+					href={alternateLocaleHref(page.route.id, page.params, LOCALE.DE, searchParams)}
 					lang={LOCALE.DE}
 					aria-current={locale === LOCALE.DE ? 'page' : undefined}
 					class={`rounded-control px-2 py-1.5 transition-colors hover:text-foreground ${locale === LOCALE.DE ? 'bg-surface-raised text-foreground' : ''}`}
