@@ -63,7 +63,9 @@ test('keeps the homepage activity chart visually stable', async ({ page }) => {
 	const chart = page.locator('main aside div[aria-hidden="true"].h-28');
 	await expect(chart).toBeVisible();
 	await expect(chart).toHaveScreenshot('homepage-activity-chart.png', {
-		animations: 'disabled'
+		animations: 'disabled',
+		// Allow a few edge pixels to differ between macOS and Ubuntu Chromium.
+		maxDiffPixels: 100
 	});
 });
 
