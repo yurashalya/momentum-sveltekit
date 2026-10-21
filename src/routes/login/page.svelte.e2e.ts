@@ -166,3 +166,54 @@ test('validates email and password constraints in the form and server action', a
 	await page.getByRole('button', { name: 'Anmelden' }).click();
 	await expect(page.getByText('Das Passwort darf keine Leerzeichen enthalten.')).toBeVisible();
 });
+
+for (const account of [
+	{ email: 'admin@demo.test', name: 'Demo Admin', role: 'Admin', germanRole: 'Administrator' },
+	{ email: 'editor@demo.test', name: 'Demo Editor', role: 'Editor', germanRole: 'Redakteur' },
+	{ email: 'viewer@demo.test', name: 'Demo Viewer', role: 'Viewer', germanRole: 'Betrachter' }
+]) {
+	test(`shows the signed-in ${account.role.toLowerCase()} on public pages`, async ({ page }) => {
+		await page.goto('/login');
+		await page.getByRole('textbox', { name: 'Email' }).fill(account.email);
+		await page.getByLabel('Password').fill('demo1234');
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page).toHaveURL('/dashboard');
+
+		await page.getByRole('link', { name: 'Momentum' }).click();
+		await expect(page).toHaveURL('/');
+		const header = page.getByRole('banner');
+		await expect(header.getByText(account.name)).toBeVisible();
+		await expect(header.getByText(account.role, { exact: true })).toBeVisible();
+		await expect(header.getByRole('link', { name: 'Dashboard' })).toHaveAttribute(
+			'href',
+			'/dashboard'
+		);
+		await expect(header.getByRole('link', { name: 'Sign in' })).toHaveCount(0);
+
+		await page.getByRole('link', { name: 'German' }).click();
+		await expect(page).toHaveURL('/de');
+		await expect(header.getByText(account.name)).toBeVisible();
+		await expect(header.getByText(account.germanRole, { exact: true })).toBeVisible();
+		await expect(header.getByRole('link', { name: 'Dashboard' })).toHaveAttribute(
+			'href',
+			'/de/dashboard'
+		);
+		await expect(header.getByRole('link', { name: 'Anmelden' })).toHaveCount(0);
+
+		if (account.role === 'Editor') {
+			await page.setViewportSize({ width: 390, height: 844 });
+			await expect(header.getByText(account.name)).toBeVisible();
+			await expect(header.getByRole('link', { name: 'Dashboard' })).toBeVisible();
+			expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(
+				390
+			);
+		}
+
+		await header.getByRole('link', { name: 'Dashboard' }).click();
+		await expect(page).toHaveURL('/de/dashboard');
+		await page.getByRole('button', { name: 'Abmelden' }).click();
+		await expect(page).toHaveURL('/de/login');
+		await page.goto('/de');
+		await expect(header.getByRole('link', { name: 'Anmelden' })).toBeVisible();
+	});
+}

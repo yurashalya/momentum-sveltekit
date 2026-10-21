@@ -5,9 +5,10 @@
 	import Container from '#lib/components/ui/Container.svelte';
 	import { useLocale } from '#lib/i18n/context.js';
 	import { LOCALE, t } from '#lib/i18n/index.js';
-	import { alternateLocaleHref, loginHref } from '#lib/i18n/hrefs.js';
+	import { alternateLocaleHref } from '#lib/i18n/hrefs.js';
 	import { localeHomePath } from '#lib/i18n/paths.js';
 	import { publicLinkHref, publicNavigationLinks } from './constants';
+	import PublicAccountStatus from './PublicAccountStatus.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 
 	const currentLocale = useLocale();
@@ -15,9 +16,10 @@
 	let homeHref = $derived(resolve(localeHomePath(locale)));
 	let isBlogRoute = $derived(page.route.id?.startsWith('/[locale=locale]/blog') ?? false);
 	let isSearchRoute = $derived(page.route.id === '/search' || page.route.id === '/de/search');
-	let isLoginRoute = $derived(page.route.id === '/login' || page.route.id === '/de/login');
 	let routeSearchParams = $derived(
-		isSearchRoute || isLoginRoute ? page.url.searchParams : undefined
+		isSearchRoute || page.route.id === '/login' || page.route.id === '/de/login'
+			? page.url.searchParams
+			: undefined
 	);
 </script>
 
@@ -41,7 +43,7 @@
 
 		<nav
 			aria-label={t(locale, 'nav.primaryLabel')}
-			class="order-3 flex w-full items-center gap-6 text-caption font-semibold text-muted sm:order-2 sm:ml-auto sm:w-auto"
+			class="order-3 flex w-full flex-wrap items-center gap-x-6 gap-y-2 text-caption font-semibold text-muted lg:order-2 lg:ml-auto lg:w-auto lg:flex-nowrap"
 		>
 			{#each publicNavigationLinks as link (link.href)}
 				{@const isActive =
@@ -60,16 +62,11 @@
 			{/each}
 		</nav>
 
-		<div class="order-2 ml-auto flex items-center gap-3 sm:order-3 sm:ml-0">
-			<a
-				href={loginHref(locale)}
-				aria-current={isLoginRoute ? 'page' : undefined}
-				class={`rounded-control border border-border-strong px-3 py-1.5 text-xs font-bold transition-colors hover:border-accent hover:text-foreground ${isLoginRoute ? 'bg-surface-raised text-foreground' : 'text-muted'}`}
-				>{t(locale, 'nav.login')}</a
-			>
+		<div class="order-2 ml-auto flex items-center gap-3 lg:order-3 lg:ml-8 lg:gap-4">
+			<PublicAccountStatus />
 			<nav
 				aria-label={t(locale, 'nav.languageLabel')}
-				class="flex items-center gap-1 text-xs font-bold text-muted"
+				class="ml-1 flex items-center gap-1 border-l border-border-strong pl-4 text-xs font-bold text-muted lg:ml-2 lg:pl-5"
 			>
 				<a
 					href={alternateLocaleHref(page.route.id, page.params, LOCALE.EN, routeSearchParams)}

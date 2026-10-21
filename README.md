@@ -2,6 +2,10 @@
 
 SvelteKit 3 + Svelte 5 + TypeScript implementation of the senior frontend take-home. The repository has the tooling, semantic design tokens, reusable UI primitives, validated mock data, a pre-rendered marketing homepage, a localized blog, and URL-driven SSR post search. Sign-in and a protected dashboard with a campaign table are implemented.
 
+## Live demo
+
+[Open Momentum](https://momentum-sveltekit.vercel.app/) — deployed on Vercel from `main`. Use the demo credentials below to access the dashboard.
+
 ## Requirements
 
 - Node.js 22 or newer

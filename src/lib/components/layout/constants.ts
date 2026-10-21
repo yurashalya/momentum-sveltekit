@@ -1,4 +1,5 @@
 import { resolve } from '$app/paths';
+import type { PublicUser } from '#lib/features/auth/schema.js';
 import type { TranslationKey, Locale } from '#lib/i18n/index.js';
 import { blogHref, searchHref } from '#lib/i18n/hrefs.js';
 import { localeHomePath } from '#lib/i18n/paths.js';
@@ -26,3 +27,9 @@ export const publicLinkHref = (locale: Locale, href: PublicLink['href']) => {
 	if (href === 'search') return searchHref(locale);
 	return resolve(`${localeHomePath(locale)}${href}`);
 };
+
+export const roleLabelKeys = {
+	admin: 'nav.role.admin',
+	editor: 'nav.role.editor',
+	viewer: 'nav.role.viewer'
+} as const satisfies Record<PublicUser['role'], TranslationKey>;
