@@ -12,6 +12,8 @@
 	import { loginFieldErrors, type LoginFieldErrors } from '#lib/features/auth/validation.js';
 	import { useLocale } from '#lib/i18n/context.js';
 	import { t } from '#lib/i18n/index.js';
+	import { loginHref } from '#lib/i18n/hrefs.js';
+	import { absoluteUrl } from '#lib/seo/site.js';
 
 	type FormData = {
 		email?: string;
@@ -74,6 +76,14 @@
 	<title>{t(locale, 'login.title')} — Momentum</title>
 	<meta name="description" content={t(locale, 'login.seo.description')} />
 	<meta name="robots" content="noindex,follow" />
+	<link rel="canonical" href={absoluteUrl(loginHref(locale))} />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={t(locale, 'login.title')} />
+	<meta property="og:description" content={t(locale, 'login.seo.description')} />
+	<meta property="og:url" content={absoluteUrl(loginHref(locale))} />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content={t(locale, 'login.title')} />
+	<meta name="twitter:description" content={t(locale, 'login.seo.description')} />
 </svelte:head>
 
 <div id="top" class="flex min-h-screen flex-col bg-canvas text-foreground">

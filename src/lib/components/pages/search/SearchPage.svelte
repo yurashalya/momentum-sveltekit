@@ -11,6 +11,7 @@
 	import { useLocale } from '#lib/i18n/context.js';
 	import { defaultLocale, formatNumber, LOCALE, t } from '#lib/i18n/index.js';
 	import { searchHref } from '#lib/i18n/hrefs.js';
+	import { absoluteUrl } from '#lib/seo/site.js';
 	import SearchFilters from './components/SearchFilters.svelte';
 
 	let {
@@ -28,7 +29,7 @@
 	let locale = $derived(currentLocale());
 	let title = $derived(t(locale, 'search.seo.title'));
 	let description = $derived(t(locale, 'search.seo.description'));
-	let canonical = $derived(searchHref(locale));
+	let canonical = $derived(absoluteUrl(searchHref(locale)));
 </script>
 
 <svelte:head>
@@ -36,12 +37,13 @@
 	<meta name="description" content={description} />
 	<meta name="robots" content="noindex,follow" />
 	<link rel="canonical" href={canonical} />
-	<link rel="alternate" hreflang={LOCALE.EN} href={searchHref(LOCALE.EN)} />
-	<link rel="alternate" hreflang={LOCALE.DE} href={searchHref(LOCALE.DE)} />
-	<link rel="alternate" hreflang="x-default" href={searchHref(defaultLocale)} />
+	<link rel="alternate" hreflang={LOCALE.EN} href={absoluteUrl(searchHref(LOCALE.EN))} />
+	<link rel="alternate" hreflang={LOCALE.DE} href={absoluteUrl(searchHref(LOCALE.DE))} />
+	<link rel="alternate" hreflang="x-default" href={absoluteUrl(searchHref(defaultLocale))} />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={description} />
+	<meta property="og:url" content={canonical} />
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={description} />

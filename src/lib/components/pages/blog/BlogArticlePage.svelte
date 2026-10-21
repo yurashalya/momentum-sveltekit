@@ -11,13 +11,15 @@
 	import { defaultLocale, formatDate, LOCALE, t } from '#lib/i18n/index.js';
 	import { blogHref, postHref } from '#lib/i18n/hrefs.js';
 	import { localeHomePath } from '#lib/i18n/paths.js';
+	import { absoluteUrl, postImageUrl } from '#lib/seo/site.js';
 
 	let { post, tags }: { post: PostArticle; tags: Tag[] } = $props();
 
 	const currentLocale = useLocale();
 	let locale = $derived(currentLocale());
 
-	let canonical = $derived(postHref(locale, post.slug));
+	let canonical = $derived(absoluteUrl(postHref(locale, post.slug)));
+	let image = $derived(postImageUrl(locale, post.slug));
 	let title = $derived(`${post.title} — Momentum`);
 
 	let paragraphs = $derived(post.body.split(/\n\s*\n/).filter(Boolean));
@@ -30,6 +32,7 @@
 					'@type': 'Article',
 					headline: post.title,
 					description: post.excerpt,
+					image,
 					datePublished: post.publishedAt,
 					author: { '@type': 'Person', name: post.author.name },
 					mainEntityOfPage: canonical
@@ -41,13 +44,13 @@
 							'@type': 'ListItem',
 							position: 1,
 							name: t(locale, 'nav.home'),
-							item: resolve(localeHomePath(locale))
+							item: absoluteUrl(resolve(localeHomePath(locale)))
 						},
 						{
 							'@type': 'ListItem',
 							position: 2,
 							name: t(locale, 'nav.blog'),
-							item: blogHref(locale)
+							item: absoluteUrl(blogHref(locale))
 						},
 						{ '@type': 'ListItem', position: 3, name: post.title, item: canonical }
 					]
@@ -63,17 +66,25 @@
 	<title>{title}</title>
 	<meta name="description" content={post.excerpt} />
 	<link rel="canonical" href={canonical} />
-	<link rel="alternate" hreflang={LOCALE.EN} href={postHref(LOCALE.EN, post.slug)} />
-	<link rel="alternate" hreflang={LOCALE.DE} href={postHref(LOCALE.DE, post.slug)} />
-	<link rel="alternate" hreflang="x-default" href={postHref(defaultLocale, post.slug)} />
+	<link rel="alternate" hreflang={LOCALE.EN} href={absoluteUrl(postHref(LOCALE.EN, post.slug))} />
+	<link rel="alternate" hreflang={LOCALE.DE} href={absoluteUrl(postHref(LOCALE.DE, post.slug))} />
+	<link
+		rel="alternate"
+		hreflang="x-default"
+		href={absoluteUrl(postHref(defaultLocale, post.slug))}
+	/>
 	<meta property="og:type" content="article" />
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={post.excerpt} />
 	<meta property="og:url" content={canonical} />
+	<meta property="og:image" content={image} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
 	<meta property="article:published_time" content={post.publishedAt} />
-	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={post.excerpt} />
+	<meta name="twitter:image" content={image} />
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	{@html jsonLdScript}
 </svelte:head>

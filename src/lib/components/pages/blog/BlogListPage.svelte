@@ -8,6 +8,7 @@
 	import { useLocale } from '#lib/i18n/context.js';
 	import { defaultLocale, formatNumber, LOCALE, t } from '#lib/i18n/index.js';
 	import { blogPageHref } from '#lib/i18n/hrefs.js';
+	import { absoluteUrl } from '#lib/seo/site.js';
 	import PostCard from '#lib/components/posts/PostCard.svelte';
 	import BlogPagination from './components/BlogPagination.svelte';
 
@@ -26,7 +27,7 @@
 	} = $props();
 	const currentLocale = useLocale();
 	let locale = $derived(currentLocale());
-	let canonical = $derived(blogPageHref(locale, page));
+	let canonical = $derived(absoluteUrl(blogPageHref(locale, page)));
 	let title = $derived(
 		page === 1 ? t(locale, 'blog.seo.title') : t(locale, 'blog.pagination.pageTitle', { page })
 	);
@@ -36,16 +37,22 @@
 	<title>{title}</title>
 	<meta name="description" content={t(locale, 'blog.seo.description')} />
 	<link rel="canonical" href={canonical} />
-	<link rel="alternate" hreflang={LOCALE.EN} href={blogPageHref(LOCALE.EN, page)} />
-	<link rel="alternate" hreflang={LOCALE.DE} href={blogPageHref(LOCALE.DE, page)} />
-	<link rel="alternate" hreflang="x-default" href={blogPageHref(defaultLocale, page)} />
+	<link rel="alternate" hreflang={LOCALE.EN} href={absoluteUrl(blogPageHref(LOCALE.EN, page))} />
+	<link rel="alternate" hreflang={LOCALE.DE} href={absoluteUrl(blogPageHref(LOCALE.DE, page))} />
+	<link
+		rel="alternate"
+		hreflang="x-default"
+		href={absoluteUrl(blogPageHref(defaultLocale, page))}
+	/>
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={title} />
 	<meta property="og:description" content={t(locale, 'blog.seo.description')} />
 	<meta property="og:url" content={canonical} />
-	<meta name="twitter:card" content="summary" />
+	<meta property="og:image" content={absoluteUrl('/og/momentum.png')} />
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={title} />
 	<meta name="twitter:description" content={t(locale, 'blog.seo.description')} />
+	<meta name="twitter:image" content={absoluteUrl('/og/momentum.png')} />
 </svelte:head>
 
 <div id="top" class="min-h-screen bg-canvas text-foreground">

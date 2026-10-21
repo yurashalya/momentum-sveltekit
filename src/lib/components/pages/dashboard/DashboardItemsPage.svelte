@@ -8,6 +8,7 @@
 	import { useLocale } from '#lib/i18n/context.js';
 	import { t } from '#lib/i18n/index.js';
 	import { dashboardHref, dashboardItemsHref } from '#lib/i18n/hrefs.js';
+	import { absoluteUrl } from '#lib/seo/site.js';
 	import CampaignFilters from './components/CampaignFilters.svelte';
 	import CampaignTable from './components/CampaignTable.svelte';
 
@@ -22,7 +23,9 @@
 
 <svelte:head>
 	<title>{t(locale, 'dashboard.items.title')} — Momentum</title>
+	<meta name="description" content={t(locale, 'dashboard.items.intro')} />
 	<meta name="robots" content="noindex,nofollow" />
+	<link rel="canonical" href={absoluteUrl(dashboardItemsHref(locale))} />
 </svelte:head>
 
 <main id="main" class="flex-1 py-section">

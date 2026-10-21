@@ -47,4 +47,14 @@ Husky runs lint-staged before each commit. Staged TypeScript, JavaScript, and Sv
 
 See the [architecture plan](docs/architecture.md) and [design tokens](docs/design-system.md). Original JSON data is under `mocks/` and never publicly exposed through `static/`. The search URL codec lives in `src/lib/features/posts`; reusable UI starts in `src/lib/components/ui`.
 
-The blog has pre-rendered lists at `/en/blog` and `/de/blog`, four URL-addressable pages per locale, and localized article URLs. `/blog` redirects to `/en/blog`. Numbered pagination keeps all 20 mock posts reachable with stable URLs for sharing, search indexing, and keyboard navigation. Post search is available at `/search` and `/de/search`; `q`, `tag`, and `sort` round-trip through the URL, including language switching and browser history. The dashboard campaign table and authenticated edit-and-rollback E2E flow are implemented. Remaining production SEO, observability, and performance budgets are still open. Homepage pricing and testimonials are explicitly illustrative.
+The blog has pre-rendered lists at `/en/blog` and `/de/blog`, four URL-addressable pages per locale, and localized article URLs. `/blog` redirects to `/en/blog`. Numbered pagination keeps all 20 mock posts reachable with stable URLs for sharing, search indexing, and keyboard navigation. Post search is available at `/search` and `/de/search`; `q`, `tag`, and `sort` round-trip through the URL, including language switching and browser history. The dashboard campaign table and authenticated edit-and-rollback E2E flow are implemented. Homepage pricing and testimonials are explicitly illustrative.
+
+## SEO and runtime
+
+`pnpm build` generates `sitemap.xml`, `robots.txt`, and 1200×630 PNG social cards for each localized post from the mock content. The PNGs are pre-rendered rather than generated per request so crawlers get a stable URL without function latency. Set the production origin in `site.config.json` before deploying to another domain. Public pages use absolute canonicals, hreflang alternates, Open Graph and Twitter metadata. Search, login, dashboard, and error pages are marked `noindex`.
+
+The Vercel adapter runs authenticated routes and the telemetry endpoint on Node. Adapter 7 does not support per-route Edge configuration, so the build adds a small `/api/locale-suggestion` Edge Function to Vercel's Build Output API. It reads `Accept-Language` using only Web APIs and has no database or session dependency. This endpoint exists on Vercel deployments; `vite preview` serves the SvelteKit routes only.
+
+## Observability
+
+The browser samples 10% of sessions and reports LCP, INP, CLS, and TTFB with `sendBeacon` to `/api/telemetry`. A root Svelte error boundary, SvelteKit client error hook, and global error listeners report errors to the same endpoint. The endpoint validates payloads and logs them server-side; it does not store them. Paths exclude query strings. Sampling is stable within a browser tab. Lighthouse and JavaScript bundle budgets are still separate remaining CI work.

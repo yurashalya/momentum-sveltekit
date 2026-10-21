@@ -7,7 +7,8 @@
 	import type { CampaignOverview } from '#lib/features/campaigns/schema.js';
 	import { useLocale } from '#lib/i18n/context.js';
 	import { formatCurrency, formatDate, formatNumber, t } from '#lib/i18n/index.js';
-	import { dashboardItemsHref } from '#lib/i18n/hrefs.js';
+	import { dashboardHref, dashboardItemsHref } from '#lib/i18n/hrefs.js';
+	import { absoluteUrl } from '#lib/seo/site.js';
 	import { campaignStatusLabelKeys, campaignStatusVariants } from './constants.js';
 
 	let { user, overview }: { user: PublicUser; overview: CampaignOverview } = $props();
@@ -29,7 +30,9 @@
 
 <svelte:head>
 	<title>{t(locale, 'dashboard.title')} — Momentum</title>
+	<meta name="description" content={t(locale, 'dashboard.overview.recentHint')} />
 	<meta name="robots" content="noindex,nofollow" />
+	<link rel="canonical" href={absoluteUrl(dashboardHref(locale))} />
 </svelte:head>
 
 <main id="main" class="flex-1 py-section">
