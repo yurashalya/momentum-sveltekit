@@ -16,6 +16,10 @@ module.exports = {
 			chromePath: process.env.CHROME_PATH,
 			numberOfRuns: Number(process.env.MOMENTUM_AUDIT_RUNS || 3),
 			settings: {
+				// GitHub's Ubuntu runner does not expose a usable Chrome sandbox.
+				...(process.env.CI === 'true' && process.platform === 'linux'
+					? { chromeFlags: '--no-sandbox --disable-dev-shm-usage' }
+					: {}),
 				...(target === 'dashboard'
 					? {
 							extraHeaders: { Cookie: process.env.MOMENTUM_AUDIT_COOKIE },
