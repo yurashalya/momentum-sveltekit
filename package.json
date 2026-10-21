@@ -16,6 +16,8 @@
 		"test:unit": "vitest run",
 		"test:unit:watch": "vitest",
 		"test:e2e": "playwright test",
+		"check:bundle": "node scripts/check-bundle-size.mjs",
+		"check:lighthouse": "node scripts/run-lighthouse.mjs",
 		"test": "pnpm run test:unit && pnpm run test:e2e",
 		"verify": "pnpm run lint && pnpm run check && pnpm run typecheck && pnpm run test:unit && pnpm run build"
 	},

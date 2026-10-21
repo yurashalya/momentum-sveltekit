@@ -55,6 +55,18 @@ test('scrolls smoothly to the top and respects reduced motion', async ({ page })
 		.toBe('auto');
 });
 
+test('keeps the homepage activity chart visually stable', async ({ page }) => {
+	await page.setViewportSize({ width: 390, height: 844 });
+	await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: 'dark' });
+	await page.addInitScript(() => localStorage.setItem('momentum-theme', 'dark'));
+	await page.goto('/');
+	const chart = page.locator('main aside div[aria-hidden="true"].h-28');
+	await expect(chart).toBeVisible();
+	await expect(chart).toHaveScreenshot('homepage-activity-chart.png', {
+		animations: 'disabled'
+	});
+});
+
 test('serves the German homepage and switches languages', async ({ page }) => {
 	const response = await page.goto('/de');
 	expect(await response?.text()).toContain('<html lang="de">');

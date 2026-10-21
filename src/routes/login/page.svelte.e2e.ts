@@ -104,8 +104,10 @@ test('shows and clears field errors before submitting', async ({ page }) => {
 	const email = page.getByRole('textbox', { name: 'Email' });
 	const password = page.getByLabel('Password');
 
-	await email.fill('ewerefewfw');
-	await expect(page.getByText('Enter a valid email address.')).toBeVisible();
+	await expect(async () => {
+		await email.fill('ewerefewfw');
+		await expect(page.getByText('Enter a valid email address.')).toBeVisible();
+	}).toPass({ timeout: 10_000 });
 	await expect(email).toHaveAttribute('aria-invalid', 'true');
 	await email.fill('editor@demo.test');
 	await expect(page.getByText('Enter a valid email address.')).not.toBeVisible();

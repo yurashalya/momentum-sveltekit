@@ -4,7 +4,9 @@ SvelteKit 3 + Svelte 5 + TypeScript implementation of the senior frontend take-h
 
 ## Live demo
 
-[Open Momentum](https://momentum-sveltekit.vercel.app/) — deployed on Vercel from `main`. Use the demo credentials below to access the dashboard.
+**Project URL:** [https://momentum-sveltekit.vercel.app/](https://momentum-sveltekit.vercel.app/)
+
+Deployed on Vercel from `main`. Use the demo credentials below to access the dashboard.
 
 ## Requirements
 
@@ -36,12 +38,34 @@ corepack pnpm check
 corepack pnpm typecheck
 corepack pnpm test:unit
 corepack pnpm build
+corepack pnpm check:bundle
 corepack pnpm test:e2e
+corepack pnpm check:lighthouse
 ```
 
 Playwright needs a browser once: `corepack pnpm exec playwright install chromium`.
 
-Husky runs lint-staged before each commit. Staged TypeScript, JavaScript, and Svelte files are formatted and linted; staged styles, markup, data, and Markdown are formatted. Run `corepack pnpm verify` for the complete local check except E2E.
+Husky runs lint-staged before each commit. Staged TypeScript, JavaScript, and Svelte files are formatted and linted; staged styles, markup, data, and Markdown are formatted. Run `corepack pnpm verify` for the local lint, type, unit, and build checks. CI also runs the Playwright visual snapshot, initial JavaScript budgets, and Lighthouse.
+
+## Performance budgets
+
+![Manual production Lighthouse result: 100 in Performance, Accessibility, Best Practices, and SEO](docs/assets/lighthouse-production.png)
+
+The image is a manual Lighthouse capture of the deployed site. The table below contains **our local measurements for the CI gates**, not numbers copied from the image: median of three Lighthouse mobile runs against a production preview on 21 October 2026. The article is `/en/blog/sub-second-lcp-on-a-content-site`; the dashboard run uses the demo viewer session.
+
+| Metric              |      CI target |      `/` |  Article | `/dashboard/items` |
+| ------------------- | -------------: | -------: | -------: | -----------------: |
+| Performance         |           ≥ 95 |       98 |       98 |                 98 |
+| Accessibility       |           ≥ 95 |      100 |      100 |                100 |
+| Best Practices      |           ≥ 95 |      100 |      100 |                100 |
+| SEO                 |           ≥ 95 |      100 |      100 |                100 |
+| LCP                 |       ≤ 2.00 s |   1.96 s |   1.81 s |             1.96 s |
+| FCP (informational) |              — |   1.88 s |   1.81 s |             1.96 s |
+| CLS                 |          ≤ 0.1 |   0.0004 |   0.0004 |                  0 |
+| Total Blocking Time |       ≤ 200 ms |     0 ms |     0 ms |               0 ms |
+| Initial JS, gzip    | ≤ 80 / 150 KiB | 68.9 KiB | 66.0 KiB |           74.9 KiB |
+
+The JS limit is 80 KiB for public routes and 150 KiB for dashboard routes. Lighthouse does not measure INP during a navigation audit; Total Blocking Time is the CI laboratory proxy, and the telemetry endpoint receives sampled real-user INP. The dashboard intentionally uses `noindex`, so Lighthouse skips only its crawlability audit. CI keeps Lighthouse reports as private artifacts; it does not publish them to a public Lighthouse service.
 
 ## Architecture
 
@@ -57,4 +81,6 @@ The Vercel adapter runs authenticated routes and the telemetry endpoint on Node.
 
 ## Observability
 
-The browser samples 10% of sessions and reports LCP, INP, CLS, and TTFB with `sendBeacon` to `/api/telemetry`. A root Svelte error boundary, SvelteKit client error hook, and global error listeners report errors to the same endpoint. The endpoint validates payloads and logs them server-side; it does not store them. Paths exclude query strings. Sampling is stable within a browser tab. Lighthouse and JavaScript bundle budgets are still separate remaining CI work.
+The browser samples 10% of sessions and reports LCP, INP, CLS, and TTFB with `sendBeacon` to `/api/telemetry`. A root Svelte error boundary, SvelteKit client error hook, and global error listeners report errors to the same endpoint. The endpoint validates payloads and logs them server-side; it does not store them. Paths exclude query strings. Sampling is stable within a browser tab.
+
+The Lighthouse gates above run three times per route and compare median values, reducing noise from one slow run.

@@ -295,19 +295,29 @@
 	aria-label={t(locale, 'dashboard.items.pagination')}
 	class="mt-6 flex flex-wrap items-center justify-between gap-4 text-caption"
 >
-	<a
-		href={pageData.page > 1 ? pageHref(pageData.page - 1) : undefined}
-		aria-disabled={pageData.page <= 1 ? true : undefined}
-		class={`rounded-control border border-border-strong px-4 py-2 font-semibold ${pageData.page <= 1 ? 'pointer-events-none opacity-50' : 'hover:border-accent hover:bg-surface-raised'}`}
-		>{t(locale, 'dashboard.items.previous')}</a
-	>
+	{#if pageData.page > 1}
+		<a
+			href={pageHref(pageData.page - 1)}
+			class="rounded-control border border-border-strong px-4 py-2 font-semibold hover:border-accent hover:bg-surface-raised"
+			>{t(locale, 'dashboard.items.previous')}</a
+		>
+	{:else}
+		<span class="rounded-control border border-border-strong px-4 py-2 font-semibold opacity-50"
+			>{t(locale, 'dashboard.items.previous')}</span
+		>
+	{/if}
 	<span class="font-semibold text-muted"
 		>{t(locale, 'dashboard.items.page', { page: pageData.page, pages: pageData.pageCount })}</span
 	>
-	<a
-		href={pageData.page < pageData.pageCount ? pageHref(pageData.page + 1) : undefined}
-		aria-disabled={pageData.page >= pageData.pageCount ? true : undefined}
-		class={`rounded-control border border-border-strong px-4 py-2 font-semibold ${pageData.page >= pageData.pageCount ? 'pointer-events-none opacity-50' : 'hover:border-accent hover:bg-surface-raised'}`}
-		>{t(locale, 'dashboard.items.next')}</a
-	>
+	{#if pageData.page < pageData.pageCount}
+		<a
+			href={pageHref(pageData.page + 1)}
+			class="rounded-control border border-border-strong px-4 py-2 font-semibold hover:border-accent hover:bg-surface-raised"
+			>{t(locale, 'dashboard.items.next')}</a
+		>
+	{:else}
+		<span class="rounded-control border border-border-strong px-4 py-2 font-semibold opacity-50"
+			>{t(locale, 'dashboard.items.next')}</span
+		>
+	{/if}
 </nav>

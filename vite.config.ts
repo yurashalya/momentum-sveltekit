@@ -11,6 +11,7 @@ export default defineConfig({
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
 			adapter: adapter(),
+			inlineStyleThreshold: 40000,
 			files: { params: 'src/params.ts' }
 		})
 	],
